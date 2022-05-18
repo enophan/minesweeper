@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+function onClick(x: number, y: number) {
+  console.log(x, y)
+}
 </script>
 
 <template>
@@ -17,6 +19,7 @@
         h-10
         hover:bg-gray
         border
+        @click="onClick(x, y)"
       >
         {{ (y - 1) * 10 + x }}
       </button>
