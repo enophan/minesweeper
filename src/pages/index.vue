@@ -1,6 +1,7 @@
 <script setup lang="ts">
 function onClick(x: number, y: number) {
-  console.log(x, y)
+  const xy = x + y
+  return xy
 }
 </script>
 
