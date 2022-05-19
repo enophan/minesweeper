@@ -140,7 +140,9 @@ const data = reactive(
 - (y - 1) * 10 + x
 - y * 10 + (x + 1)
 
-然后关联起来
+但是一会儿关联起来就一样了。
+
+## 方阵和按钮关联起来
 
 ```vue
 <script setup lang="ts">
@@ -171,8 +173,11 @@ function onClick(x: number, y: number) {
     </div>
   </div>
 </template>
-
 ```
+
+这样就绑定了状态，但是状态不能是一个数字。
+
+## interface
 
 
 
