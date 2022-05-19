@@ -40,7 +40,7 @@ function onClick(x: number, y: number) {
         border
         @click="onClick(x, y)"
       >
-        {{ y * 10 + (x + 1) }}
+        {{ item.x }}
       </button>
     </div>
   </div>
