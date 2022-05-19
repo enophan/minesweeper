@@ -1,7 +1,13 @@
 <script setup lang="ts">
-const data = reactive(Array.from({ length: 10 },
-  () => Array.from({ length: 10 }, () => 0),
-))
+const HEIGHT = 10 // 高是y
+const WIDTH = 10 // 宽是x
+
+const state = reactive(
+  Array.from({ length: HEIGHT }, (_, y) =>
+    Array.from({ length: WIDTH },
+      (_, x) => y * 10 + (x + 1),
+    ),
+  ))
 
 function onClick(x: number, y: number) {
   const xy = x + y
@@ -12,15 +18,12 @@ function onClick(x: number, y: number) {
 <template>
   <div>
     Minesweeper
-
-    {{ data }}
-
     <div
-      v-for="y in 10"
+      v-for="row, y in state"
       :key="y"
     >
       <button
-        v-for="x in 10"
+        v-for="item, x in row"
         :key="x"
         w-10
         h-10
