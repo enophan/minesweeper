@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const data = reactive(Array.from({ length: 10 },
+  () => Array.from({ length: 10 }, () => 0),
+))
+
 function onClick(x: number, y: number) {
   const xy = x + y
   return xy
@@ -8,6 +12,8 @@ function onClick(x: number, y: number) {
 <template>
   <div>
     Minesweeper
+
+    {{ data }}
 
     <div
       v-for="y in 10"
