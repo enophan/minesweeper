@@ -251,3 +251,7 @@ function updateNumbers() {
 还要考虑超出边界问题。`[_x, _y]`这样表示`state[y2][x2]`
 
 还有`directions.forEach(([dy, dx]) => {}`原来可以直接写数组
+
+```shell
+ni -D @iconify-json/mdi
+```
