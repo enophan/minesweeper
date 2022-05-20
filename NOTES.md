@@ -255,3 +255,16 @@ function updateNumbers() {
 ```shell
 ni -D @iconify-json/mdi
 ```
+
+这个地方不太懂，主要是不懂vue
+
+```vue
+<template v-if="block.reveal">
+  <div v-if="block.mine" i-mdi-mine />
+  <div v-else>
+    {{ block.adjacentMines }}
+  </div>
+</template>
+```
+
+有点懂了，因为下面是模板，每一个模板都要用`v-if`做一次判断，所以要用`<template>`
