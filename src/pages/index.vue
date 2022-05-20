@@ -17,11 +17,19 @@ const state = reactive(
       }),
     ),
   ))
-
+// 埋炸弹
+function generateMines() {
+  for (const row of state) {
+    for (const block of row)
+      block.mine = Math.random() < 0.3
+  }
+}
 function onClick(x: number, y: number) {
   const xy = x + y
   return xy
 }
+
+generateMines()
 </script>
 
 <template>
@@ -40,7 +48,7 @@ function onClick(x: number, y: number) {
         border
         @click="onClick(x, y)"
       >
-        {{ item.x }}
+        {{ item.mine ? 'x' : '.' }}
       </button>
     </div>
   </div>

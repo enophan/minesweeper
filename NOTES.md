@@ -166,8 +166,8 @@ function onClick(x: number, y: number) {
 <template>
   <div>
     Minesweeper
-    <div v-for="row, y in state" :key="y" >
-      <button v-for="item, x in row" :key="x" w-10 h-10 hover:bg-gray border @click="onClick(x, y)" >
+    <div v-for="row, y in state" :key="y">
+      <button v-for="item, x in row" :key="x" w-10 h-10 hover:bg-gray border @click="onClick(x, y)">
         {{ (y - 1) * 10 + x }}
       </button>
     </div>
@@ -204,7 +204,7 @@ const state = reactive(
 
 ## 生成炸弹
 
-
+[MDN | for...of](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...of)
 
 
 
