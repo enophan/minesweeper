@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BlockList } from 'net'
+
 interface BlockState {
   x: number
   y: number
@@ -56,6 +58,10 @@ function generateMines() {
       block.mine = Math.random() < 0.3
   }
 }
+
+function getBlockClass(block: BlockState) {
+  return block.mine ? 'text-red' : 'text-gray'
+}
 function onClick(x: number, y: number) {
   const xy = x + y
   return xy
@@ -68,7 +74,6 @@ updateNumbers()
 <template>
   <div>
     Minesweeper
-    <div>(y,x)</div>
     <div
       v-for="row, y in state"
       :key="y"
@@ -80,10 +85,15 @@ updateNumbers()
         h-10
         hover:bg-gray
         border
+        :class="getBlockClass(item)"
         @click="onClick(x, y)"
       >
-        <!-- {{ `${y},${x}` }} -->
-        {{ item.mine ? 'x' : item.adjacentMines }}
+        <div v-if="item.mine">
+          x
+        </div>
+        <div v-else>
+          {{ item.adjacentMines }}
+        </div>
       </button>
     </div>
   </div>
