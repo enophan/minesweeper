@@ -206,11 +206,48 @@ const state = reactive(
 
 [MDN | for...of](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...of)
 
+## 炸弹数
 
+```js
+function updateNumbers() {
+  state.forEach((row, y) => {
+    row.forEach((block, x) => {
+      if (block.mine)
+        return
+      directions.forEach((elem) => {
+        const _x = elem[0] + block.y
+        const _y = elem[1] + block.x
+        if([_x,_y]坐标上有炸弹)
+          block.adjacentMine += 1
+      })
+    })
+  })
+}
+```
 
+然后我就想不出来`if([_x,_y]坐标上有炸弹)`该怎么写
 
+antfu的代码如下
 
+```js
+function updateNumbers() {
+  state.forEach((row, y) => {
+    row.forEach((block, x) => {
+      if (block.mine)
+        return
+      directions.forEach(([dy, dx]) => {
+        const x2 = dx + x
+        const y2 = dy + y
+        if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
+          return
+        if (state[y2][x2].mine)
+          block.adjacentMines += 1
+      })
+    })
+  })
+}
+```
 
+还要考虑超出边界问题。`[_x, _y]`这样表示`state[y2][x2]`
 
-
-
+还有`directions.forEach(([dy, dx]) => {}`原来可以直接写数组
