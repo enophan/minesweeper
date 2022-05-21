@@ -343,3 +343,7 @@ checkBlockAround(block)
 ```
 
 加上断言就好了
+
+## 插旗
+
+`@contextmenu.prevent`vue右击事件

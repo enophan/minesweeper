@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const dev = true // 开发模式写完就删
 interface BlockState {
   x: number
   y: number
@@ -71,14 +70,20 @@ function generateMines(initial: BlockState) {
 // 格子上色
 function getBlockClass(block: BlockState) {
   if (!block.revealed)
-    return 'bg-gray-500/10'
+    return 'bg-gray-500/10 hover:bg-gray/50'
   return block.mine
     ? 'bg-red/85'
     : numberColors[block.adjacentMines]
 }
 // 获取坐标
 function onClick(block: BlockState) {
+  if (block.flagged)
+    return
   block.revealed = true
+  if (block.mine) {
+    alert('game over')
+    return
+  }
   if (!minesGenerate) {
     minesGenerate = true
     generateMines(block)
@@ -107,6 +112,12 @@ function blockAround(block: BlockState) {
   }).filter(Boolean) as BlockState[]
   // .filter((elem) => { return Boolean(elem) })
 }
+// 插旗
+function plantFlag(block: BlockState) {
+  if (block.revealed)
+    return
+  block.flagged = !block.flagged
+}
 </script>
 
 <template>
@@ -124,13 +135,16 @@ function blockAround(block: BlockState) {
           v-for="block, x in row"
           :key="x"
           w-10 h-10 m=".4"
-          hover="bg-gray/50"
           border="1 gray-400/10"
           flex="~" items-center justify-center
           :class="getBlockClass(block)"
           @click="onClick(block)"
+          @contextmenu.prevent="plantFlag(block)"
         >
-          <template v-if="block.revealed || dev">
+          <template v-if="block.flagged">
+            <div i-mdi-flag text-red />
+          </template>
+          <template v-else-if="block.revealed">
             <div v-if="block.mine" i-mdi-mine />
             <div v-else>
               {{ block.adjacentMines }}
