@@ -50,29 +50,22 @@ function updateNumbers() {
     row.forEach((block, x) => {
       if (block.mine)
         return
-      directions.forEach(([dy, dx]) => {
-        const x2 = dx + x
-        const y2 = dy + y
-        if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
-          return
-        if (state[y2][x2].mine)
-          block.adjacentMines += 1
-      })
+      blockAround(block)
+        .forEach((item) => {
+          if (item.mine)
+            block.adjacentMines += 1
+        })
     })
   })
 }
 // 埋炸弹
-function generateMines(inital: BlockState) {
+function generateMines(initial: BlockState) {
   for (const row of state) {
     for (const block of row)
       block.mine = Math.random() < 0.2
   }
-  inital.mine = false
-  directions.forEach(([dy, dx]) => {
-    const y2 = dy + inital.y
-    const x2 = dx + inital.x
-    state[y2][x2].mine = false
-  })
+  initial.mine = false
+  blockAround(initial).forEach(item => item.mine = false)
   updateNumbers()
 }
 // 格子上色
@@ -90,6 +83,29 @@ function onClick(block: BlockState) {
     minesGenerate = true
     generateMines(block)
   }
+  expendZero(block)
+}
+// 展开周围没炸弹的格子
+function expendZero(block: BlockState) {
+  if (block.adjacentMines)
+    return
+  blockAround(block).forEach((item) => {
+    if (item.revealed)
+      return
+    item.revealed = true
+    expendZero(item)
+  })
+}
+// 搜集某个block周围的格子
+function blockAround(block: BlockState) {
+  return directions.map(([dy, dx]) => {
+    const y2 = dy + block.y
+    const x2 = dx + block.x
+    if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
+      return undefined
+    return state[y2][x2]
+  }).filter(Boolean) as BlockState[]
+  // .filter((elem) => { return Boolean(elem) })
 }
 </script>
 

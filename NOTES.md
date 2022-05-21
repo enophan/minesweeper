@@ -270,3 +270,76 @@ ni -D @iconify-json/mdi
 有点懂了，因为下面是模板，每一个模板都要用`v-if`做一次判断，所以要用`<template>`
 
 ## 点下去再生成炸弹，上下左右不能生成炸弹
+
+## 重构计算周围`block`的情况
+
+antfu 把 forEach 换成 map
+
+1. map速度比foreach快
+
+2. map会返回一个新数组，不对原数组产生影响,foreach不会产生新数组，foreach返回undefined
+
+3. map因为返回数组所以可以链式操作，foreach不能
+
+4. map里可以用return ,而foreach里用return不起作用，foreach不能用break，会直接报错
+
+```typescript
+function checkBlockAround(block: BlockState) {
+  return directions.map(([dy, dx]) => {
+    const y2 = dy + block.y
+    const x2 = dx + block.x
+    if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
+      return undefined
+    return state[y2][x2]
+  })
+    .filter(Boolean)
+}
+```
+
+`Boolean`是一个函数，它会对遍历数组中的元素，并根据元素的真假类型，对应返回 true 或 false。
+
+`.filter(Boolean)`是`.filter((elem) => { return Boolean(elem) })`的简写。
+
+
+```typescript
+function checkBlockAround(block: BlockState) {
+  return directions.map(([dy, dx]) => {
+    const y2 = dy + block.y
+    const x2 = dx + block.x
+    if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
+      return undefined
+    return state[y2][x2]
+  }).filter(Boolean) as BlockState[]
+}
+```
+
+`as BlockState[]`这个是因为ts自身的原因，因为在上边`return undefine`，而整体返回的是一个数组，ts就认为`checkBlockAround()`可能会返回 BlockStae 或 undefined 
+
+```typescript
+(local function) checkBlockAround(block: BlockState): ({
+    x: number;
+    y: number;
+    revealed: {
+        valueOf: () => boolean;
+    };
+    mine?: {
+        valueOf: () => boolean;
+    } | undefined;
+    flagged?: {
+        valueOf: () => boolean;
+    } | undefined;
+    adjacentMines: number;
+} | undefined)[] // <---
+```
+
+用的时候就得这样
+
+```typescript
+checkBlockAround(block)
+  .forEach((item) => {
+    if (item?.mine) // <---- 要写成 item?.mine 而不是 item.mine
+      block.adjacentMines += 1
+  })
+```
+
+加上断言就好了
