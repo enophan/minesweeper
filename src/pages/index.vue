@@ -7,8 +7,8 @@ interface BlockState {
   flagged?: Boolean // 插旗
   adjacentMines: number // 附近的炸弹数 adjacent 附近的
 }
-const HEIGHT = 10 // 高是y
-const WIDTH = 10 // 宽是x
+const HEIGHT = 5 // 高是y
+const WIDTH = 5 // 宽是x
 const state = reactive(
   Array.from({ length: HEIGHT }, (_, y) =>
     Array.from({ length: WIDTH },
@@ -89,6 +89,7 @@ function onClick(block: BlockState) {
     generateMines(block)
   }
   expendZero(block)
+  gameState()
 }
 // 展开周围没炸弹的格子
 function expendZero(block: BlockState) {
@@ -117,6 +118,20 @@ function plantFlag(block: BlockState) {
   if (block.revealed)
     return
   block.flagged = !block.flagged
+  gameState()
+}
+// 判断输赢
+function gameState() {
+  if (!minesGenerate)
+    return
+  const blocks = state.flat()
+  // TODO判断输赢的算法还是有问题
+  if (blocks.every(block => block.revealed || block.flagged)) {
+    if (blocks.some(block => block.flagged && block.mine))
+      alert('you cheat')
+    else
+      alert('you win')
+  }
 }
 </script>
 
