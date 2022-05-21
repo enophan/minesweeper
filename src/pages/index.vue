@@ -2,7 +2,7 @@
 interface BlockState {
   x: number
   y: number
-  reveal: Boolean // 有没有被翻开
+  revealed: Boolean // 有没有被翻开
   mine?: Boolean // 有没有炸弹
   flagged?: Boolean // 插旗
   adjacentMines: number // 附近的炸弹数 adjacent 附近的
@@ -15,7 +15,7 @@ const state = reactive(
       (_, x): BlockState => ({
         x,
         y,
-        reveal: false,
+        revealed: false,
         adjacentMines: 0,
       }),
     ),
@@ -70,7 +70,7 @@ function generateMines() {
 }
 // 格子上色
 function getBlockClass(block: BlockState) {
-  if (!block.reveal)
+  if (!block.revealed)
     return ''
   return block.mine
     ? 'bg-red/85'
@@ -78,7 +78,7 @@ function getBlockClass(block: BlockState) {
 }
 // 获取坐标
 function onClick(block: BlockState) {
-  block.reveal = true
+  block.revealed = true
 }
 
 generateMines()
@@ -106,7 +106,7 @@ updateNumbers()
           :class="getBlockClass(block)"
           @click="onClick(block)"
         >
-          <template v-if="block.reveal">
+          <template v-if="block.revealed">
             <div v-if="block.mine" i-mdi-mine />
             <div v-else>
               {{ block.adjacentMines }}
