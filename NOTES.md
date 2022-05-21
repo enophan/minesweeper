@@ -215,10 +215,10 @@ function updateNumbers() {
       if (block.mine)
         return
       directions.forEach((elem) => {
-        const _x = elem[0] + block.y
-        const _y = elem[1] + block.x
-        if([_x,_y]坐标上有炸弹)
-          block.adjacentMine += 1
+        const _y = elem[0] + block.y
+        const _x = elem[1] + block.x
+        // if ([_x,_y]坐标上有炸弹)
+        //   block.adjacentMine += 1
       })
     })
   })
@@ -268,3 +268,5 @@ ni -D @iconify-json/mdi
 ```
 
 有点懂了，因为下面是模板，每一个模板都要用`v-if`做一次判断，所以要用`<template>`
+
+## 点下去再生成炸弹，上下左右不能生成炸弹

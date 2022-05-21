@@ -62,11 +62,17 @@ function updateNumbers() {
   })
 }
 // 埋炸弹
-function generateMines() {
+function generateMines(inital: BlockState) {
   for (const row of state) {
     for (const block of row)
       block.mine = Math.random() < 0.2
   }
+  inital.mine = false
+  directions.forEach(([dy, dx]) => {
+    const y2 = dy + inital.y
+    const x2 = dx + inital.x
+    state[y2][x2].mine = false
+  })
   updateNumbers()
 }
 // 格子上色
@@ -82,7 +88,7 @@ function onClick(block: BlockState) {
   block.revealed = true
   if (!minesGenerate) {
     minesGenerate = true
-    generateMines()
+    generateMines(block)
   }
 }
 </script>
