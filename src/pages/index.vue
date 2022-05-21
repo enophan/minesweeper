@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const dev = true // 开发模式写完就删
 interface BlockState {
   x: number
   y: number
@@ -20,7 +21,6 @@ const state = reactive(
       }),
     ),
   ))
-
 // 代表了某个block周围八个block的坐标
 const directions = [
   [1, 1],
@@ -32,7 +32,6 @@ const directions = [
   [-1, 1],
   [0, 1],
 ]
-
 const numberColors = [
   'text-transparent',
   'text-blue-500',
@@ -43,6 +42,8 @@ const numberColors = [
   'text-orange-500',
   'text-teal-500',
 ]
+// 炸弹是在点击的一瞬间计算好的，这个变量就是炸弹生成的标志
+let minesGenerate = false
 // 四周的炸弹数
 function updateNumbers() {
   state.forEach((row, y) => {
@@ -60,18 +61,18 @@ function updateNumbers() {
     })
   })
 }
-
 // 埋炸弹
 function generateMines() {
   for (const row of state) {
     for (const block of row)
       block.mine = Math.random() < 0.2
   }
+  updateNumbers()
 }
 // 格子上色
 function getBlockClass(block: BlockState) {
   if (!block.revealed)
-    return ''
+    return 'bg-gray-500/10'
   return block.mine
     ? 'bg-red/85'
     : numberColors[block.adjacentMines]
@@ -79,10 +80,11 @@ function getBlockClass(block: BlockState) {
 // 获取坐标
 function onClick(block: BlockState) {
   block.revealed = true
+  if (!minesGenerate) {
+    minesGenerate = true
+    generateMines()
+  }
 }
-
-generateMines()
-updateNumbers()
 </script>
 
 <template>
@@ -106,7 +108,7 @@ updateNumbers()
           :class="getBlockClass(block)"
           @click="onClick(block)"
         >
-          <template v-if="block.revealed">
+          <template v-if="block.revealed || dev">
             <div v-if="block.mine" i-mdi-mine />
             <div v-else>
               {{ block.adjacentMines }}
