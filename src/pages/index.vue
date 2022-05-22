@@ -9,7 +9,7 @@ interface BlockState {
 }
 const HEIGHT = 5 // 高是y
 const WIDTH = 5 // 宽是x
-const state = reactive(
+const state = ref(
   Array.from({ length: HEIGHT }, (_, y) =>
     Array.from({ length: WIDTH },
       (_, x): BlockState => ({
@@ -45,7 +45,7 @@ const numberColors = [
 let minesGenerate = false
 // 四周的炸弹数
 function updateNumbers() {
-  state.forEach((row, y) => {
+  state.value.forEach((row, y) => {
     row.forEach((block, x) => {
       if (block.mine)
         return
@@ -59,7 +59,7 @@ function updateNumbers() {
 }
 // 埋炸弹
 function generateMines(initial: BlockState) {
-  for (const row of state) {
+  for (const row of state.value) {
     for (const block of row)
       block.mine = Math.random() < 0.2
   }
@@ -109,7 +109,7 @@ function blockAround(block: BlockState) {
     const x2 = dx + block.x
     if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT)
       return undefined
-    return state[y2][x2]
+    return state.value[y2][x2]
   }).filter(Boolean) as BlockState[]
   // .filter((elem) => { return Boolean(elem) })
 }
@@ -122,7 +122,7 @@ function plantFlag(block: BlockState) {
 }
 // 判断输赢
 function gameState() {
-  const blocks = state.flat()
+  const blocks = state.value.flat()
   if (blocks.every(block => block.revealed || block.flagged)) {
     if (blocks.some(block => !block.mine && block.flagged))
       alert('you cheat')
