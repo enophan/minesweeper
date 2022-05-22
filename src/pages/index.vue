@@ -122,8 +122,6 @@ function plantFlag(block: BlockState) {
 }
 // 判断输赢
 function gameState() {
-  if (!minesGenerate)
-    return
   const blocks = state.flat()
   if (blocks.every(block => block.revealed || block.flagged)) {
     if (blocks.some(block => !block.mine && block.flagged))
