@@ -1,12 +1,5 @@
 <script setup lang="ts">
-interface BlockState {
-  x: number
-  y: number
-  revealed: Boolean // 有没有被翻开
-  mine?: Boolean // 有没有炸弹
-  flagged?: Boolean // 插旗
-  adjacentMines: number // 附近的炸弹数 adjacent 附近的
-}
+import type { BlockState } from '~/types'
 const HEIGHT = 5 // 高是y
 const WIDTH = 5 // 宽是x
 const state = ref(
