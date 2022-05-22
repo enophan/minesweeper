@@ -128,7 +128,6 @@ function gameState() {
 <template>
   <div>
     Minesweeper
-    <p>test netfily</p>
     <div p5>
       <div
         v-for="row, y in state"
