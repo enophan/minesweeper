@@ -125,9 +125,8 @@ function gameState() {
   if (!minesGenerate)
     return
   const blocks = state.flat()
-  // TODO判断输赢的算法还是有问题
   if (blocks.every(block => block.revealed || block.flagged)) {
-    if (blocks.some(block => block.flagged && block.mine))
+    if (blocks.some(block => !block.mine && block.flagged))
       alert('you cheat')
     else
       alert('you win')
